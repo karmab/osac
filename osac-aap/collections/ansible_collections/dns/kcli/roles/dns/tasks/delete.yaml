@@ -1,0 +1,4 @@
+---
+- name: Delete DNS record via kcli
+  ansible.builtin.command:
+    cmd: kcli delete dns -d {{ dns_zone }} {{ dns_record_name }}

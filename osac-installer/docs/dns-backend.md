@@ -12,7 +12,14 @@ For general AAP configuration see [AAP Configuration](aap-configuration.md).
 | `DNS_CLASS` | Collection | Description |
 |-------------|------------|-------------|
 | `dns.route53.dns` (default) | `dns.route53` | AWS Route 53 |
+| `dns.kcli.dns` | `dns.kcli` | kcli — DNS via libvirt dnsmasq |
 | `dns.noop.dns` | `dns.noop` | No-op — skips DNS record management |
+
+The **kcli** backend manages DNS records through kcli's libvirt
+integration, using dnsmasq for name resolution. Use it in
+libvirt-based lab or CI environments where clusters run as virtual
+machines managed by kcli. The backend creates and deletes A/AAAA
+records by delegating to kcli's DNS management commands.
 
 The **noop** backend performs no DNS create or delete operations. It
 logs a generic guidance message without exposing record names or

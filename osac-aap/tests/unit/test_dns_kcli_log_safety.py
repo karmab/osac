@@ -1,0 +1,74 @@
+"""Regression tests for No-Sensitive-Data-In-Logs on the kcli DNS backend.
+
+The ``dns.kcli.dns`` role must not log record names, zones, values, or
+other caller-controlled strings that may contain internal hostnames or
+customer identifiers (e.g. ``api-int.<cluster>.<base-domain>``).
+
+These tests parse the shipped task YAML directly, following the pattern
+established by ``test_dns_noop_log_safety.py``.
+"""
+
+from pathlib import Path
+
+import pytest
+import yaml
+
+
+AAP_ROOT = Path(__file__).parents[2]
+KCLI_ROLE = (
+    AAP_ROOT
+    / "collections"
+    / "ansible_collections"
+    / "dns"
+    / "kcli"
+    / "roles"
+    / "dns"
+)
+CREATE_TASKS = KCLI_ROLE / "tasks" / "create.yaml"
+DELETE_TASKS = KCLI_ROLE / "tasks" / "delete.yaml"
+
+SENSITIVE_VARS = [
+    "dns_record_name",
+    "dns_record_value",
+    "dns_record_type",
+    "dns_zone",
+    "dns_record_ttl",
+]
+
+
+def _load_tasks(path: Path) -> list[dict]:
+    """Load the task list from a YAML file."""
+    return yaml.safe_load(path.read_text())
+
+
+@pytest.fixture(params=["create", "delete"])
+def task_file(request):
+    """Yield (label, path) for each kcli entry point."""
+    if request.param == "create":
+        return ("create", CREATE_TASKS)
+    return ("delete", DELETE_TASKS)
+
+
+def test_task_names_do_not_contain_record_variables(task_file):
+    """Task names must not interpolate record-specific variables."""
+    label, path = task_file
+    tasks = _load_tasks(path)
+    for task in tasks:
+        name = task.get("name", "")
+        for var in SENSITIVE_VARS:
+            assert var not in name, (
+                f"kcli {label} task name contains {var!r}: {name!r}"
+            )
+
+
+def test_debug_messages_do_not_contain_record_variables(task_file):
+    """Debug messages must not interpolate record-specific variables."""
+    label, path = task_file
+    tasks = _load_tasks(path)
+    for task in tasks:
+        debug = task.get("ansible.builtin.debug", {})
+        msg = debug.get("msg", "")
+        for var in SENSITIVE_VARS:
+            assert var not in msg, (
+                f"kcli {label} debug msg contains {var!r}"
+            )
