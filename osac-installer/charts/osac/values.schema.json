@@ -1482,6 +1482,14 @@
                     "NETRIS_USERNAME": {
                       "type": "string",
                       "description": "Netris API username"
+                    },
+                    "KCLI_HOST": {
+                      "type": "string",
+                      "description": "Hostname or IP of the kcli hypervisor for DNS management"
+                    },
+                    "KCLI_USER": {
+                      "type": "string",
+                      "description": "SSH user for kcli hypervisor access"
                     }
                   },
                   "additionalProperties": false
@@ -1509,6 +1517,10 @@
                     "SERVER_SSH_BASTION_KEY": {
                       "type": "string",
                       "description": "SSH private key for bastion access"
+                    },
+                    "KCLI_SSH_PRIVATE_KEY": {
+                      "type": "string",
+                      "description": "SSH private key for kcli hypervisor access"
                     }
                   },
                   "additionalProperties": false
