@@ -59,3 +59,14 @@ def test_task_names_do_not_contain_record_variables(task_file):
             assert var not in name, (
                 f"kcli {label} task name contains {var!r}: {name!r}"
             )
+
+
+def test_shell_commands_use_no_log(task_file):
+    """Tasks that run commands must set no_log: true."""
+    label, path = task_file
+    tasks = _load_tasks(path)
+    for task in tasks:
+        if "ansible.builtin.shell" in task or "ansible.builtin.command" in task:
+            assert task.get("no_log") is True, (
+                f"kcli {label} task missing no_log: {task.get('name')!r}"
+            )
