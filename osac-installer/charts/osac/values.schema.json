@@ -1386,7 +1386,7 @@
                     },
                     "DNS_CLASS": {
                       "type": "string",
-                      "description": "Fully-qualified Ansible role name of the DNS driver. dns.route53.dns manages Route 53 records; dns.noop.dns skips external DNS; dns.kcli.dns manages DNS via kcli for libvirt-based environments.",
+                      "description": "Fully-qualified Ansible role name of the DNS driver. dns.route53.dns manages Route 53 records; dns.noop.dns skips external DNS; dns.kcli.dns manages DNS via kcli.",
                       "enum": [
                         "dns.kcli.dns",
                         "dns.noop.dns",
