@@ -1483,13 +1483,17 @@
                       "type": "string",
                       "description": "Netris API username"
                     },
+                    "KCLI_CLIENT": {
+                      "type": "string",
+                      "description": "kcli client/profile name for DNS management (default: local)"
+                    },
                     "KCLI_HOST": {
                       "type": "string",
                       "description": "Hostname or IP of the kcli hypervisor for DNS management"
                     },
                     "KCLI_USER": {
                       "type": "string",
-                      "description": "SSH user for kcli hypervisor access"
+                      "description": "SSH user for kcli hypervisor access (default: root)"
                     }
                   },
                   "additionalProperties": false
